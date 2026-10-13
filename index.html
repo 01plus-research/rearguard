@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RearGuard — Feasibility Study · RearGuard 可行性研究</title>
+<meta name="description" content="Feasibility study for RearGuard, a DIY rear-approach radar warning for cyclists built by a 10th-grade student: verdict, MVP, parts with prices, steps, risks.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  [data-lang="en"] [lang="zh"] { display: none }
+  [data-lang="zh"] [lang="en"] { display: none }
+  :root { --ink:#1d2329; --mut:#5b6670; --line:#dde2e6; --bg:#fbfaf7; --acc:#9a4a12; --ok:#2f6b3a; --warn:#a1660a; --bad:#a3302a; }
+  * { box-sizing: border-box }
+  html { -webkit-text-size-adjust: 100% }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.6 "Inter","Noto Sans SC",system-ui,sans-serif; }
+  [data-lang="zh"] body { font-family:"Noto Sans SC","Inter",system-ui,sans-serif; line-height:1.75 }
+  main { max-width: 860px; margin: 0 auto; padding: 24px 20px 64px; }
+  header.top { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:8px }
+  h1 { font-family:"Source Serif 4","Noto Sans SC",serif; font-size:2rem; line-height:1.2; margin:0 0 4px; font-weight:600 }
+  .sub { color:var(--mut); margin:0; font-size:.95rem }
+  h2 { font-family:"Source Serif 4","Noto Sans SC",serif; font-size:1.4rem; font-weight:600; margin:44px 0 10px; padding-top:12px; border-top:1px solid var(--line) }
+  h3 { font-size:1rem; margin:22px 0 6px; font-weight:600 }
+  p, li { max-width: 68ch }
+  a { color:var(--acc); text-decoration-thickness:1px; text-underline-offset:2px; word-break:break-word }
+  #lang { flex:none; border:1px solid var(--ink); background:#fff; color:var(--ink); padding:6px 14px; border-radius:4px; font:500 .95rem "Inter","Noto Sans SC",sans-serif; cursor:pointer; position:sticky; top:12px }
+  #lang:hover { background:var(--ink); color:#fff }
+  .verdict { margin:20px 0 8px; border:2px solid var(--warn); background:#fff; border-radius:6px; padding:18px 20px }
+  .verdict .tag { display:inline-block; background:var(--warn); color:#fff; font-weight:600; padding:3px 10px; border-radius:3px; letter-spacing:.02em }
+  .verdict p { margin:10px 0 }
+  .nums { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px; margin-top:14px }
+  .nums div { border-top:1px solid var(--line); padding-top:8px }
+  .nums b { display:block; font-size:1.25rem; font-family:"Source Serif 4",serif }
+  .nums span { color:var(--mut); font-size:.88rem }
+  .note { color:var(--mut); font-size:.9rem }
+  .tw { overflow-x:auto; margin:10px 0; -webkit-overflow-scrolling:touch }
+  table { border-collapse:collapse; width:100%; font-size:.92rem; background:#fff }
+  th, td { text-align:left; vertical-align:top; padding:7px 9px; border-bottom:1px solid var(--line) }
+  th { font-weight:600; background:#f1efe9; white-space:nowrap }
+  td.n { text-align:right; white-space:nowrap }
+  tr.hard td { background:#fff4e5 }
+  tr.tot td { font-weight:600; border-top:2px solid var(--ink) }
+  .pill { font-size:.78rem; padding:1px 6px; border-radius:3px; white-space:nowrap }
+  .lo { background:#e5f0e7; color:var(--ok) } .md { background:#fbefd9; color:var(--warn) } .hi { background:#f6e0de; color:var(--bad) }
+  ol.steps li { margin-bottom:6px }
+  .box { background:#fff; border-left:3px solid var(--acc); padding:10px 14px; margin:12px 0 }
+  footer { margin-top:40px; color:var(--mut); font-size:.85rem }
+  @media (max-width:480px){ h1{font-size:1.6rem} main{padding:16px 14px 48px} th,td{padding:6px} body{font-size:15px} }
+</style>
+</head>
+<body>
+<main>
+<header class="top">
+  <div>
+    <h1><span lang="en">RearGuard: can it be built?</span><span lang="zh">RearGuard：能做出来吗？</span></h1>
+    <p class="sub"><span lang="en">Feasibility study · rear-approach radar warning for cyclists · 10th grade, 16 weeks × 4 h, $300 · researched 13 Oct 2026</span><span lang="zh">可行性研究 · 骑行后方来车雷达预警 · 10 年级，16 周 × 每周 4 小时，预算 $300 · 调研日期 2026 年 10 月 13 日</span></p>
+  </div>
+  <button type="button" id="lang" onclick="
+  var h=document.documentElement; h.dataset.lang = h.dataset.lang==='en' ? 'zh' : 'en';
+  try{localStorage.setItem('lang',h.dataset.lang)}catch(e){}"><span lang="en">中文</span><span lang="zh">English</span></button>
+</header>
+<script>try{var s=localStorage.getItem('lang'); if(s)document.documentElement.dataset.lang=s}catch(e){}</script>
+
+<section class="verdict">
+  <span class="tag"><span lang="en">Feasible with changes</span><span lang="zh">调整后可行</span></span>
+  <p lang="en">The sensing is solved off the shelf: the Hi-Link HLK-LD2451 is a $6–10, 24 GHz radar module built for rear-vehicle detection that already reports each target's distance, angle and speed, and maintained Arduino libraries read it. The student's real work is the rule that tells a car from a passing cyclist, and proving it with labelled rides. That fits 16 weeks only if the phone app is dropped from the first version, nothing is designed from scratch, and the first tests happen off public roads.</p>
+  <p lang="zh">感知部分已有现成方案：Hi-Link HLK-LD2451 是一块 $6–10 的 24 GHz 雷达模块，本来就是为后方来车检测设计的，能直接输出每个目标的距离、角度和速度，并且有仍在维护的 Arduino 库。学生真正要做的，是写出区分"汽车"和"超车的骑行者"的判断规则，并用带标注的骑行数据证明它有效。要在 16 周内完成，前提是：第一版不做手机 App，不从零设计任何电路，最初的测试不上公共道路。</p>
+  <div class="nums">
+    <div><b>$54 – $264</b><span lang="en">parts: minimum set → with power bank, iron and a Garmin Varia benchmark (pre-shipping)</span><span lang="zh">零件：最低配置 → 含充电宝、电烙铁和 Garmin Varia 对照（不含运费）</span></div>
+    <div><b><span lang="en">16 weeks · ~66 h</span><span lang="zh">16 周 · 约 66 小时</span></b><span lang="en">vs 64 h available — no slack</span><span lang="zh">可用 64 小时——几乎没有余量</span></div>
+    <div><b><span lang="en">Main risk</span><span lang="zh">最大风险</span></b><span lang="en">a fast e-bike and a slow car look the same to this radar (both are just "closing at X km/h")</span><span lang="zh">在这块雷达看来，快速电助力车和慢速汽车是一样的（都只是"以 X km/h 接近"）</span></div>
+  </div>
+</section>
+<p class="note"><span lang="en">Reading taken: "wearable" is read as a bike-mounted radar plus a handlebar vibration unit. A helmet unit is a later variant and is not costed here.</span><span lang="zh">本研究的理解："可穿戴"指装在车上的雷达加车把上的振动提示器。头盔版本留到以后，这里不计入成本。</span></p>
+
+<h2><span lang="en">1. The MVP</span><span lang="zh">1. 最小可行产品（MVP）</span></h2>
+<p lang="en">A rear unit on the seatpost (LD2451 radar + ESP32 board + USB power bank) logs every radar frame and sends an alert over ESP-NOW to a handlebar unit (ESP32 board + haptic driver + vibration motor + buzzer). A car closing from behind gives a strong double buzz. A cyclist overtaking gives nothing, or a single short pulse.</p>
+<p lang="zh">座管上的后部单元（LD2451 雷达 + ESP32 开发板 + USB 充电宝）记录每一帧雷达数据，并通过 ESP-NOW 向车把单元（ESP32 开发板 + 触觉驱动板 + 振动马达 + 蜂鸣器）发送警报。后方有汽车接近时，车把强烈振动两下；骑行者超车时不振动，或只短振一下。</p>
+<p lang="en"><b>The deliverable is a number</b>: car-detection rate and cyclist false-alert rate, measured against video of real rides, compared with a Garmin Varia RTL515 on the same rides.</p>
+<p lang="zh"><b>最终成果是一组数字</b>：以真实骑行的视频为标准，测出汽车检出率和骑行者误报率，并与同一次骑行中 Garmin Varia RTL515 的表现对比。</p>
+<h3><span lang="en">Two-minute demo</span><span lang="zh">两分钟演示</span></h3>
+<p lang="en">Play a 30-second split-screen clip: rear video, live radar trace, and the moment the handlebar buzzes as a car approaches and stays quiet as a cyclist passes. Then show the confusion table from the logged rides. Finally, hand the judge the handlebar unit and trigger it.</p>
+<p lang="zh">播放 30 秒分屏视频：后方画面、实时雷达轨迹，以及汽车接近时车把振动、骑行者超车时保持安静的瞬间。然后展示记录骑行得出的混淆矩阵。最后把车把单元交给评委，现场触发一次。</p>
+<h3><span lang="en">Out of scope for version 1</span><span lang="zh">第一版不做</span></h3>
+<ul>
+  <li lang="en">Phone app. Analysis is done in Python from the CSV log; a BLE phone display is a stretch goal only.</li><li lang="zh">手机 App。用 Python 分析 CSV 日志；手机蓝牙显示只作为加分项。</li>
+  <li lang="en">Custom PCB, machine learning, a helmet unit, a tail light, and waterproofing beyond a rain cover.</li><li lang="zh">定制 PCB、机器学习、头盔版本、尾灯，以及超出防雨罩程度的防水。</li>
+</ul>
+
+<h2><span lang="en">2. What already exists</span><span lang="zh">2. 已有的产品与项目</span></h2>
+<ul>
+  <li lang="en"><b>Commercial radars.</b> Garmin Varia RTL515 (~$150, 140 m range), RearVue 820, Bryton, Lezyne and Cycplus all warn of approaching vehicles. Reviews report misses and false positives. The RTL515 only reports that "something faster than you is closing", without classifying it.</li>
+  <li lang="zh"><b>商用雷达。</b>Garmin Varia RTL515（约 $150，探测距离 140 m）、RearVue 820、Bryton、Lezyne、Cycplus 都能提示后方来车。评测提到它们有漏报和误报。RTL515 只报告"有比你快的东西在接近"，不判断是什么。</li>
+  <li lang="en"><b>The module.</b> Hi-Link sells the LD2451 for rear-vehicle detection on non-motorised lanes and motorcycles. Libraries: <a href="https://github.com/Fiooodooor/HLK-LD245X">HLK-LD245X</a> (Arduino, BSD-3, updated May 2026) and <a href="https://github.com/WizBangCrash/esphome-ld2451">esphome-ld2451</a> (updated Sep 2026).</li>
+  <li lang="zh"><b>雷达模块。</b>Hi-Link 将 LD2451 定位为非机动车道和摩托车的后方来车检测模块。可用的库：<a href="https://github.com/Fiooodooor/HLK-LD245X">HLK-LD245X</a>（Arduino，BSD-3，2026 年 5 月仍有更新）和 <a href="https://github.com/WizBangCrash/esphome-ld2451">esphome-ld2451</a>（2026 年 9 月更新）。</li>
+  <li lang="en"><b>DIY.</b> No published LD2451 bike radar was found. OpenELAB's Radar Cube is a hobby rear-warning device for bikes. No peer-reviewed accuracy study of bike radars was found.</li>
+  <li lang="zh"><b>DIY 项目。</b>没有找到已发布的 LD2451 自行车雷达项目。OpenELAB 的 Radar Cube 是一个业余的自行车后方预警装置。也没有找到经过同行评审的自行车雷达准确率研究。</li>
+</ul>
+<p lang="en"><b>What is still the student's own:</b> an open, measured car-vs-cyclist rule and a labelled ride dataset with honest error rates, benchmarked against a commercial unit.</p>
+<p lang="zh"><b>学生自己的贡献：</b>一套公开、经过测量的"汽车 vs 骑行者"判断规则，加上一份带标注、如实报告误差的骑行数据集，并与商用产品做对比。</p>
+
+<h2><span lang="en">3. The hard part</span><span lang="zh">3. 真正的难点</span></h2>
+<p lang="en">The LD2451 outputs, per target (up to 5): distance, horizontal angle and radial speed relative to the sensor. It can filter by direction and by minimum speed (0–120 km/h). It gives no target size or type. So the classifier is mostly <b>closing speed</b>: riding at 20 km/h, a cyclist at 28 km/h closes at 8 km/h, while a car at 50 km/h closes at 30 km/h.</p>
+<p lang="zh">LD2451 对每个目标（最多 5 个）输出：距离、水平角度、相对传感器的径向速度。它可以按方向和最低速度（0–120 km/h）过滤，但不输出目标大小或类型。所以判断主要依靠<b>接近速度</b>：自己以 20 km/h 骑行时，28 km/h 的骑行者接近速度是 8 km/h，50 km/h 的汽车是 30 km/h。</p>
+<p lang="en">That separates the common case. It fails where speeds overlap: fast e-bikes, cars crawling in traffic, and the rider stopped at a light. Whether distance, angle or track persistence closes the gap is <b>unknown until tested</b>. The test is roughly 150 labelled overtakes. Also unknown: how well the module, which is sold for fixed and vehicle mounting, copes with a vibrating seatpost. Bench and parking-lot tests in weeks 4–8 settle that before any road riding.</p>
+<p lang="zh">这能区分大多数情况，但在速度重叠时会失效：快速电助力车、堵车中缓行的汽车、骑行者在红灯前停车。距离、角度或轨迹持续时间能否弥补这一点，<b>要测了才知道</b>，大约需要 150 次带标注的超车。另一个未知数：这块模块是为固定安装和机动车设计的，装在振动的座管上表现如何？第 4–8 周的台架和停车场测试会在上路之前回答这个问题。</p>
+
+<h2><span lang="en">4. Can they actually finish it?</span><span lang="zh">4. 他们真的能完成吗？</span></h2>
+<div class="tw"><table>
+<tr><th></th><th><span lang="en">Already has</span><span lang="zh">已具备</span></th><th><span lang="en">Must learn (time)</span><span lang="zh">需要学习（时间）</span></th></tr>
+<tr><td><b><span lang="en">Student</span><span lang="zh">学生</span></b></td>
+<td><span lang="en">Python; basic Arduino sketches</span><span lang="zh">Python；基础 Arduino 程序</span></td>
+<td><span lang="en">Hardware UART and a library's API (3 h); ESP-NOW between two boards (3 h); I²C haptic driver (1 h); soldering about 10 joints (2 h, supervised); pandas plots and a confusion matrix (3 h)</span><span lang="zh">硬件串口和库的 API（3 小时）；两块板之间的 ESP-NOW 通信（3 小时）；I²C 触觉驱动（1 小时）；在指导下焊接约 10 个焊点（2 小时）；pandas 作图和混淆矩阵（3 小时）</span></td></tr>
+<tr><td><b><span lang="en">Instructor</span><span lang="zh">指导老师</span></b></td>
+<td><span lang="en">Code review, Python analysis, experimental design</span><span lang="zh">代码审查、Python 分析、实验设计</span></td>
+<td><span lang="en">Needs one person who has soldered before for a single 1-hour session (makerspace staff, a parent, or a physics teacher). Must own the safety plan and the fair's risk-assessment form.</span><span lang="zh">需要一位焊过电路的人，花 1 小时带一次（创客空间老师、家长或物理老师）。指导老师必须负责安全方案和科学展的风险评估表。</span></td></tr>
+</table></div>
+<p lang="en"><b>Hours:</b> about 66 student hours against 64 available (16 × 4), plus about 15 instructor hours. The hard part (road data, labelling and tuning) is 19 h on its own. Any slip of more than one week means cutting from section 8.</p>
+<p lang="zh"><b>工时：</b>学生约需 66 小时，可用 64 小时（16 × 4）；指导老师约 15 小时。难点部分（路测、标注、调参）单独就要 19 小时。任何超过一周的延误，都要按第 8 节砍掉内容。</p>
+
+<h2><span lang="en">5. What to buy</span><span lang="zh">5. 采购清单</span></h2>
+<div class="tw"><table>
+<tr><th><span lang="en">Part</span><span lang="zh">零件</span></th><th><span lang="en">Why</span><span lang="zh">用途</span></th><th><span lang="en">Qty</span><span lang="zh">数量</span></th><th><span lang="en">Unit</span><span lang="zh">单价</span></th><th><span lang="en">Buy</span><span lang="zh">购买</span></th><th><span lang="en">Note</span><span lang="zh">备注</span></th></tr>
+<tr><td>Hi-Link HLK-LD2451</td><td><span lang="en">The radar. Load-bearing.</span><span lang="zh">雷达本体，核心件</span></td><td class="n">2</td><td class="n">$7.58</td><td><a href="https://www.aliexpress.us/item/3256807115242234.html">AliExpress</a> · <a href="https://www.ozdisan.com/en/p/radar-modules-655/hi-link-hlk-ld2451-1590539">Özdisan $9.24</a></td><td><span lang="en">Ships from China/Türkiye: order in week 1. One is a spare. Solder 4 wires into the pin holes. The AliExpress price is from a search index (the page needs a login).</span><span lang="zh">从中国/土耳其发货，第 1 周就下单；第二块备用。需在针孔焊 4 根线。AliExpress 价格来自搜索索引（页面需登录）。</span></td></tr>
+<tr><td>Seeed XIAO ESP32-S3</td><td><span lang="en">Rear and handlebar MCUs; built-in LiPo charging. Load-bearing.</span><span lang="zh">前后两个主控，自带锂电充电，核心件</span></td><td class="n">2</td><td class="n">$7.49</td><td><a href="https://www.seeedstudio.com/XIAO-ESP32S3-p-5627.html">Seeed</a></td><td><span lang="en">Choose the pre-soldered option if offered</span><span lang="zh">如有，选预焊排针版</span></td></tr>
+<tr><td>Adafruit DRV2605L (#2305)</td><td><span lang="en">Haptic driver with strong buzz patterns. Load-bearing.</span><span lang="zh">触觉驱动，可产生强振动模式，核心件</span></td><td class="n">1</td><td class="n">$7.95</td><td><a href="https://www.adafruit.com/product/2305">Adafruit</a></td><td><span lang="en">STEMMA QT, no solder for I²C</span><span lang="zh">STEMMA QT 接口，I²C 无需焊接</span></td></tr>
+<tr><td><span lang="en">Vibrating mini motor disc (#1201)</span><span lang="zh">迷你振动马达片 (#1201)</span></td><td><span lang="en">The alert</span><span lang="zh">提示振动</span></td><td class="n">2</td><td class="n">$1.95</td><td><a href="https://www.adafruit.com/product/1201">Adafruit</a></td><td><span lang="en">Solder 2 leads</span><span lang="zh">焊 2 根线</span></td></tr>
+<tr><td><span lang="en">STEMMA QT to female sockets (#4397)</span><span lang="zh">STEMMA QT 转杜邦母头线 (#4397)</span></td><td><span lang="en">Connects the haptic driver to the XIAO</span><span lang="zh">连接触觉驱动和 XIAO</span></td><td class="n">1</td><td class="n">$0.95</td><td><a href="https://www.adafruit.com/product/4397">Adafruit</a></td><td></td></tr>
+<tr><td><span lang="en">Piezo buzzer PS1240 (#160)</span><span lang="zh">压电蜂鸣器 PS1240 (#160)</span></td><td><span lang="en">Backup cue if vibration is masked by road buzz</span><span lang="zh">路面振动盖过马达时的备用提示</span></td><td class="n">1</td><td class="n">$1.50</td><td><a href="https://www.adafruit.com/product/160">Adafruit</a></td><td></td></tr>
+<tr><td>LiPo 3.7 V 500 mAh (#1578)</td><td><span lang="en">Handlebar unit power</span><span lang="zh">车把单元供电</span></td><td class="n">1</td><td class="n">$7.95</td><td><a href="https://www.adafruit.com/product/1578">Adafruit</a></td><td><span lang="en">Solder to the XIAO BAT pads; never puncture it</span><span lang="zh">焊到 XIAO 的 BAT 焊盘；切勿刺破</span></td></tr>
+<tr><td><span lang="en">F/F jumper wires (#1950)</span><span lang="zh">母对母杜邦线 (#1950)</span></td><td><span lang="en">Wiring; cut one end to solder into the radar</span><span lang="zh">接线；剪掉一端焊到雷达上</span></td><td class="n">1</td><td class="n">$1.95</td><td><a href="https://www.adafruit.com/product/1950">Adafruit</a></td><td></td></tr>
+<tr class="tot"><td colspan="3"><span lang="en">Minimum set</span><span lang="zh">最低配置合计</span></td><td class="n">$54.34</td><td colspan="2"><span lang="en">+ shipping/tax (not quoted)</span><span lang="zh">另加运费/税（未报价）</span></td></tr>
+<tr><td><span lang="en">USB battery pack 10000 mAh (#1566)</span><span lang="zh">USB 充电宝 10000 mAh (#1566)</span></td><td><span lang="en">5 V for the rear unit and radar</span><span lang="zh">后部单元和雷达的 5 V 电源</span></td><td class="n">1</td><td class="n">$39.95</td><td><a href="https://www.adafruit.com/product/1566">Adafruit</a></td><td><span lang="en">Optional: any phone power bank the family owns works</span><span lang="zh">可选：家里现有的手机充电宝即可</span></td></tr>
+<tr><td><span lang="en">Soldering iron BEST 102C (#3685)</span><span lang="zh">电烙铁 BEST 102C (#3685)</span></td><td><span lang="en">About 10 joints</span><span lang="zh">约 10 个焊点</span></td><td class="n">1</td><td class="n">$19.95</td><td><a href="https://www.adafruit.com/product/3685">Adafruit</a></td><td><span lang="en">Optional if the school has one</span><span lang="zh">学校有就不用买</span></td></tr>
+<tr><td>Garmin Varia RTL515</td><td><span lang="en">Commercial benchmark on the same rides</span><span lang="zh">同场骑行的商用对照</span></td><td class="n">1</td><td class="n">~$149.99</td><td><a href="https://www.amazon.com/dp/B086TVFX1D">Amazon</a></td><td><span lang="en">Recommended. List price $199.99; buy only near $150, or the budget is exceeded</span><span lang="zh">推荐购买。标价 $199.99；只在约 $150 时买，否则超预算</span></td></tr>
+<tr class="tot"><td colspan="3"><span lang="en">Full set</span><span lang="zh">完整配置合计</span></td><td class="n">$264.23</td><td colspan="2"><span lang="en">Leaves about $35 for shipping, zip ties and filament</span><span lang="zh">剩约 $35 用于运费、扎带和打印耗材</span></td></tr>
+</table></div>
+<p lang="en">Enclosures and mounts are 3D-printed (school printer assumed). The radar must see through plastic only, never metal. Ground-truth video comes from a phone or action camera the family already owns, facing backwards; no mount is priced here.</p>
+<p lang="zh">外壳和支架用 3D 打印（假设学校有打印机）。雷达前方只能是塑料，不能有金属遮挡。作为真值的视频用家里现有的手机或运动相机朝后拍摄，支架未计价。</p>
+
+<h2><span lang="en">6. The steps</span><span lang="zh">6. 步骤</span></h2>
+<div class="tw"><table>
+<tr><th>#</th><th><span lang="en">Step (done when…)</span><span lang="zh">步骤（完成标准）</span></th><th><span lang="en">Week</span><span lang="zh">周次</span></th><th><span lang="en">h</span><span lang="zh">小时</span></th></tr>
+<tr><td>1</td><td><span lang="en">Order everything; radars first. Done when order confirmations exist.</span><span lang="zh">下单全部零件，雷达优先。拿到订单确认即完成。</span></td><td>1</td><td class="n">2</td></tr>
+<tr><td>2</td><td><span lang="en">Arduino IDE + ESP32 core; blink both XIAOs.</span><span lang="zh">安装 Arduino IDE 和 ESP32 核心；两块 XIAO 都能点灯。</span></td><td>1–2</td><td class="n">3</td></tr>
+<tr><td>3</td><td><span lang="en">Supervised soldering session; build the handlebar unit (XIAO + DRV2605L + motor + buzzer + LiPo). Buzzes on a button press.</span><span lang="zh">在指导下练习焊接；组装车把单元（XIAO + DRV2605L + 马达 + 蜂鸣器 + 锂电）。按键即振动。</span></td><td>2–3</td><td class="n">6</td></tr>
+<tr><td>4</td><td><span lang="en">ESP-NOW link: rear board triggers handlebar buzz; latency measured under 100 ms.</span><span lang="zh">ESP-NOW 通信：后板触发车把振动；实测延迟低于 100 ms。</span></td><td>3–4</td><td class="n">4</td></tr>
+<tr><td>5</td><td><span lang="en">Radar on the bench: solder 4 leads, update firmware with HLKRadarTool, confirm the baud rate (sources say 115200 or 256000), print targets via the HLK-LD245X library. A person jogging toward it shows as "approaching".</span><span lang="zh">雷达台架测试：焊 4 根线，用 HLKRadarTool 升级固件，确认波特率（资料有 115200 和 256000 两种说法），用 HLK-LD245X 库打印目标。有人朝它慢跑时显示为"接近"。</span></td><td>4–5</td><td class="n">6</td></tr>
+<tr><td>6</td><td><span lang="en">Logger: every frame (time, distance, angle, speed) saved to flash and dumped as CSV.</span><span lang="zh">记录器：每帧（时间、距离、角度、速度）存入闪存并导出为 CSV。</span></td><td>5</td><td class="n">3</td></tr>
+<tr><td>7</td><td><span lang="en">Print enclosures and seatpost/handlebar mounts. Fitted to the bike, survives a 10-minute bumpy ride.</span><span lang="zh">打印外壳和座管/车把支架。装上车后经受 10 分钟颠簸骑行。</span></td><td>6–7</td><td class="n">7</td></tr>
+<tr><td>8</td><td><span lang="en">Safety plan, parent consent and fair risk-assessment form signed.</span><span lang="zh">安全方案、家长同意书和科学展风险评估表签字完成。</span></td><td>7</td><td class="n">2</td></tr>
+<tr><td>9</td><td><span lang="en">Empty-lot test: a parent drives past at 15/25/40 km/h, a second cyclist overtakes; 30 passes on video.</span><span lang="zh">空停车场测试：家长分别以 15/25/40 km/h 开车经过，另一名骑行者超车；共 30 次并录像。</span></td><td>8</td><td class="n">4</td></tr>
+<tr class="hard"><td>10</td><td><b><span lang="en">HARD PART: 6+ rides on quiet roads with video and the Varia; label every overtake (car/cyclist/other) in a sheet, aiming for at least 150.</span><span lang="zh">难点：在车少的道路上骑行 6 次以上，同时录像并开 Varia；在表格中标注每次超车（汽车/骑行者/其他），目标至少 150 次。</span></b></td><td>9–11</td><td class="n">12</td></tr>
+<tr class="hard"><td>11</td><td><b><span lang="en">HARD PART: in Python, tune the rule (closing speed, distance, persistence) on 70% of the data; report a confusion matrix on the other 30%.</span><span lang="zh">难点：用 Python 在 70% 数据上调整规则（接近速度、距离、持续时间），在另外 30% 上给出混淆矩阵。</span></b></td><td>11–12</td><td class="n">7</td></tr>
+<tr><td>12</td><td><span lang="en">Flash the tuned rule; 2 validation rides compared with the Varia.</span><span lang="zh">烧录调好的规则；骑 2 次验证并与 Varia 对比。</span></td><td>13</td><td class="n">3</td></tr>
+<tr><td>13</td><td><span lang="en">Demo video, poster and write-up.</span><span lang="zh">演示视频、海报和报告。</span></td><td>14–16</td><td class="n">7</td></tr>
+<tr class="tot"><td></td><td><span lang="en">Total</span><span lang="zh">合计</span></td><td></td><td class="n">66</td></tr>
+</table></div>
+
+<h2><span lang="en">7. What could go wrong</span><span lang="zh">7. 可能出的问题</span></h2>
+<div class="tw"><table>
+<tr><th><span lang="en">Risk</span><span lang="zh">风险</span></th><th><span lang="en">Likely</span><span lang="zh">可能性</span></th><th><span lang="en">Response</span><span lang="zh">应对</span></th></tr>
+<tr><td><span lang="en"><b>Rider safety on public roads.</b> A 10th grader trusting a prototype, or looking at a device, near traffic.</span><span lang="zh"><b>公共道路骑行安全。</b>10 年级学生在车流旁依赖原型机，或分心看设备。</span></td><td><span class="pill md"><span lang="en">Med</span><span lang="zh">中</span></span></td><td><span lang="en">The device is never the safety system: shoulder checks as normal. Daylight, quiet roads, helmet and rear light, an adult riding along for road sessions. Lot tests come first.</span><span lang="zh">设备绝不作为安全保障：照常回头观察。白天、车少的道路、戴头盔开尾灯，路测时有成人陪骑。先做停车场测试。</span></td></tr>
+<tr><td><span lang="en"><b>Car and cyclist speeds overlap</b> (e-bikes, slow traffic).</span><span lang="zh"><b>汽车和骑行者速度重叠</b>（电助力车、慢速车流）。</span></td><td><span class="pill hi"><span lang="en">High</span><span lang="zh">高</span></span></td><td><span lang="en">Report it as a finding with its error rate; add distance and persistence features. Do not hide it.</span><span lang="zh">作为研究发现如实报告误差率；加入距离和持续时间特征。不要回避。</span></td></tr>
+<tr><td><span lang="en"><b>Radar unreliable on a moving bike</b> (vibration, ground clutter).</span><span lang="zh"><b>雷达在行驶中不稳定</b>（振动、地面杂波）。</span></td><td><span class="pill md"><span lang="en">Med</span><span lang="zh">中</span></span></td><td><span lang="en">Found by week 8. Raise the SNR threshold and trigger count, add foam isolation, tilt the radar up 5–10°.</span><span lang="zh">第 8 周前发现。提高信噪比阈值和触发次数，加泡棉减振，雷达上仰 5–10°。</span></td></tr>
+<tr><td><span lang="en"><b>Radar shipping delay</b> (single source, overseas).</span><span lang="zh"><b>雷达物流延误</b>（单一来源、海外发货）。</span></td><td><span class="pill md"><span lang="en">Med</span><span lang="zh">中</span></span></td><td><span lang="en">Order 2 in week 1 from two sellers; steps 2–4 do not need the radar.</span><span lang="zh">第 1 周从两个卖家各订一块；第 2–4 步不需要雷达。</span></td></tr>
+<tr><td><span lang="en"><b>Vibration not felt</b> through gloves on rough road.</span><span lang="zh"><b>感觉不到振动</b>（戴手套、路面颠簸）。</span></td><td><span class="pill md"><span lang="en">Med</span><span lang="zh">中</span></span></td><td><span lang="en">The buzzer is already in the build; measure "felt / not felt" on each ride.</span><span lang="zh">蜂鸣器已包含在设计中；每次骑行记录"感觉到/没感觉到"。</span></td></tr>
+<tr><td><span lang="en"><b>Privacy.</b> Rear video records plates and faces of the public.</span><span lang="zh"><b>隐私。</b>后方视频会拍到车牌和路人面孔。</span></td><td><span class="pill hi"><span lang="en">Certain</span><span lang="zh">必然</span></span></td><td><span lang="en">Use video only for labelling, keep it off the internet, and blur any clip shown.</span><span lang="zh">视频仅用于标注，不上传网络，展示的片段要打码。</span></td></tr>
+<tr><td><span lang="en"><b>Human-subjects rules.</b> ISEF-affiliated fairs exempt an invention tested only by the student (or one adult guardian) <i>if there is no health or safety hazard</i>. Road riding may not qualify, and the second cyclist is another participant.</span><span lang="zh"><b>人体受试者规则。</b>ISEF 体系的科学展规定：仅由学生本人（或一位成年监护人）测试的发明可豁免，<i>前提是无健康或安全风险</i>。上路骑行未必符合，第二名骑行者也算其他参与者。</span></td><td><span class="pill md"><span lang="en">Med</span><span lang="zh">中</span></span></td><td><span lang="en">Ask the fair's SRC/IRB <b>before week 8</b>. Missing this can disqualify the project.</span><span lang="zh"><b>第 8 周之前</b>咨询科学展的 SRC/IRB。漏掉这一步可能导致项目被取消资格。</span></td></tr>
+<tr><td><span lang="en"><b>Batteries.</b> The LiPo is crushed in a crash or charged unattended.</span><span lang="zh"><b>电池。</b>锂电在摔车中被挤压，或无人看管时充电。</span></td><td><span class="pill lo"><span lang="en">Low</span><span lang="zh">低</span></span></td><td><span lang="en">Hard enclosure; charge only when supervised; the rear unit uses a protected commercial power bank.</span><span lang="zh">硬质外壳；只在有人看管时充电；后部单元使用带保护的商用充电宝。</span></td></tr>
+</table></div>
+
+<h2><span lang="en">8. If it goes wrong, then what</span><span lang="zh">8. 出问题时怎么办</span></h2>
+<ol>
+  <li lang="en">Cut first: the Varia comparison, then the buzzer, then the second validation ride.</li><li lang="zh">先砍：Varia 对比，然后是蜂鸣器，再然后是第二次验证骑行。</li>
+  <li lang="en">If on-road data is blocked (approval or safety), run the whole study in the lot with controlled passes at known speeds. That is still a valid engineering test.</li><li lang="zh">如果路测受阻（审批或安全原因），全部研究改在停车场以已知速度做受控通过测试。这仍然是有效的工程测试。</li>
+  <li lang="en">If the car/cyclist rule fails, the project becomes "a $54 open rear radar, and where speed-only classification breaks". That is an honest negative result with data.</li><li lang="zh">如果"汽车/骑行者"规则失败，项目就变成"一台 $54 的开源后视雷达，以及纯速度分类在哪些情况下失效"。这是有数据支撑的、诚实的负面结果。</li>
+</ol>
+
+<h2><span lang="en">9. Where it could go</span><span lang="zh">9. 后续方向</span></h2>
+<p lang="en">A solid regional science-fair entry (ISEF category: Embedded Systems or Engineering Technology), with the dataset and error rates as the strength. A student-journal paper (e.g. Journal of Emerging Investigators) is realistic only with 150+ labelled overtakes and a clear comparison to the Varia. No patent case: commercial radars already exist. Version 2 could add the BLE phone app and a helmet unit.</p>
+<p lang="zh">适合作为地区科学展的扎实参赛项目（ISEF 类别：嵌入式系统或工程技术），数据集和误差率是亮点。只有拿到 150 次以上带标注的超车数据并与 Varia 清晰对比，才有可能投学生期刊（如 Journal of Emerging Investigators）。不适合申请专利，因为商用雷达已经存在。第二版可以加入蓝牙手机 App 和头盔单元。</p>
+
+<h2><span lang="en">10. Sources</span><span lang="zh">10. 资料来源</span></h2>
+<p class="note"><span lang="en">All prices were checked on 13 Oct 2026 unless noted. Prices move.</span><span lang="zh">除注明外，价格均于 2026 年 10 月 13 日核实，价格可能变动。</span></p>
+<ul class="note">
+  <li><a href="https://www.hlktech.net/index.php?id=1282">Hi-Link LD2451 product page</a> — 10–100 m, 5 V, 70×35 mm, approach/away, $6.15</li>
+  <li><a href="https://github.com/WizBangCrash/esphome-ld2451">esphome-ld2451</a> — 5 targets, min speed 0–120 km/h, direction filter, SNR 3–8, trigger count</li>
+  <li><a href="https://github.com/Fiooodooor/HLK-LD245X">Fiooodooor/HLK-LD245X</a> (Arduino library) · <a href="https://forum.arduino.cc/t/using-hlk-ld2451-radar-for-speed-measurment/1328105">Arduino forum: LD2451 at 115200 baud</a></li>
+  <li><a href="https://www.aliexpress.us/item/3256807115242234.html">AliExpress LD2451</a> ($7.58, via search index) · <a href="https://www.ozdisan.com/en/p/radar-modules-655/hi-link-hlk-ld2451-1590539">Özdisan</a> ($9.24, 14 in stock)</li>
+  <li><a href="https://www.seeedstudio.com/XIAO-ESP32S3-p-5627.html">Seeed XIAO ESP32-S3</a> · <a href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/">XIAO wiki</a> (LiPo charging, BLE 5.0)</li>
+  <li>Adafruit <a href="https://www.adafruit.com/product/2305">2305</a>, <a href="https://www.adafruit.com/product/1201">1201</a>, <a href="https://www.adafruit.com/product/4397">4397</a>, <a href="https://www.adafruit.com/product/160">160</a>, <a href="https://www.adafruit.com/product/1578">1578</a>, <a href="https://www.adafruit.com/product/1950">1950</a>, <a href="https://www.adafruit.com/product/1566">1566</a>, <a href="https://www.adafruit.com/product/3685">3685</a></li>
+  <li><a href="https://camelcamelcamel.com/product/B086TVFX1D">camelcamelcamel: Varia RTL515</a> ($149.99, 25 Sep 2026) · <a href="https://www.campfirecycling.com/product/garmin-varia-rtl515.html">Campfire Cycling</a> (140 m) · <a href="https://road.cc/review/garmin-varia-rtl515-291455">road.cc review</a></li>
+  <li><a href="https://www.cyclingweekly.com/group-tests/best-radar-bike-lights-tested-and-rated">Cycling Weekly radar group test</a> · <a href="https://www.siroko.com/blog/c/?p=56621">Siroko on Bryton false positives</a></li>
+  <li><a href="https://www.hackster.io/openelab/rada-cube-a7b6bb">OpenELAB Radar Cube</a> · <a href="https://f-droid.org/en/packages/es.jjrh.bikeradar/">Bike Radar Android app (GPL-3.0)</a></li>
+  <li><a href="https://www.societyforscience.org/isef/international-rules/human-participants/">ISEF human participants rules</a> · <a href="https://www.tamucc.edu/education/events/sciencefair/files/resource-junior-senior-isef-rules-review.pdf">ISEF rules review (invention exemption)</a></li>
+</ul>
+<footer><span lang="en">Not found: an official LD2451 beam-angle and current-draw figure, a live LD2451 price on a US retailer, and any peer-reviewed bike-radar accuracy study.</span><span lang="zh">未找到：LD2451 官方波束角和功耗数据、美国零售商的 LD2451 实时价格、经同行评审的自行车雷达准确率研究。</span></footer>
+</main>
+</body>
+</html>
